@@ -1,0 +1,312 @@
+{
+	"info": {
+		"_postman_id": "e8eb10d0-26f7-4433-b9c9-051be3ff4109",
+		"name": "todo apis",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "4997699"
+	},
+	"item": [
+		{
+			"name": "register",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "tayyab",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "ahar@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "123123",
+							"type": "text"
+						},
+						{
+							"key": "password_confirmation",
+							"value": "123123",
+							"type": "text"
+						}
+					]
+				},
+				"url": "todo.test/api/register"
+			},
+			"response": []
+		},
+		{
+			"name": "email/verify",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer B77t2XMA0Zk1eUyvfHSEzm19s537Igjdz8cSREYYa951744e",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "otp",
+							"value": "421357",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "todo.test/api/email/verify?otp",
+					"host": [
+						"todo",
+						"test"
+					],
+					"path": [
+						"api",
+						"email",
+						"verify"
+					],
+					"query": [
+						{
+							"key": "otp",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "resend/otp",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer uJ7BNiqXwUamX4sZthrYdO5vwhRs4ykBTUOJUddA34a5a04f",
+						"type": "text"
+					}
+				],
+				"url": "todo.test/api/resend/otp"
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "email",
+							"value": "tayyab@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "123123",
+							"type": "text"
+						}
+					]
+				},
+				"url": "todo.test/api/login"
+			},
+			"response": []
+		},
+		{
+			"name": "todo list",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer 69GZMTggysb8mJQ0UuZMh648UFIlgIdaebBgmIo490b538f0",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": "todo.test/api/todo"
+			},
+			"response": []
+		},
+		{
+			"name": "todo store",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer 69GZMTggysb8mJQ0UuZMh648UFIlgIdaebBgmIo490b538f0",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "title",
+							"value": "DSTUM",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "Need to align the daily task in this meeting",
+							"type": "text"
+						}
+					]
+				},
+				"url": "todo.test/api/todo"
+			},
+			"response": []
+		},
+		{
+			"name": "todo show",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer B77t2XMA0Zk1eUyvfHSEzm19s537Igjdz8cSREYYa951744e",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "title",
+							"value": "new task",
+							"type": "text"
+						},
+						{
+							"key": "description",
+							"value": "this task description",
+							"type": "text"
+						}
+					]
+				},
+				"url": "todo.test/api/todo/1"
+			},
+			"response": []
+		},
+		{
+			"name": "todo delete",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer 69GZMTggysb8mJQ0UuZMh648UFIlgIdaebBgmIo490b538f0",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": "todo.test/api/todo/6"
+			},
+			"response": []
+		},
+		{
+			"name": "todo update",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer B77t2XMA0Zk1eUyvfHSEzm19s537Igjdz8cSREYYa951744e",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "todo.test/api/todo/6?title=daily report task&description=need to share daily market report share",
+					"host": [
+						"todo",
+						"test"
+					],
+					"path": [
+						"api",
+						"todo",
+						"6"
+					],
+					"query": [
+						{
+							"key": "title",
+							"value": "daily report task"
+						},
+						{
+							"key": "description",
+							"value": "need to share daily market report share"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
