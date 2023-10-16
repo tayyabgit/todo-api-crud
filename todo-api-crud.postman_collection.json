@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "e8eb10d0-26f7-4433-b9c9-051be3ff4109",
 		"name": "todo apis",
-		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "4997699"
 	},
 	"item": [
@@ -32,17 +32,27 @@
 						},
 						{
 							"key": "password",
-							"value": "123123",
+							"value": "Tayyab@1",
 							"type": "text"
 						},
 						{
 							"key": "password_confirmation",
-							"value": "123123",
+							"value": "Tayyab@1",
 							"type": "text"
 						}
 					]
 				},
-				"url": "todo.test/api/register"
+				"url": {
+					"raw": "todo-api-crud.test/api/register",
+					"host": [
+						"todo-api-crud",
+						"test"
+					],
+					"path": [
+						"api",
+						"register"
+					]
+				}
 			},
 			"response": []
 		},
@@ -58,7 +68,7 @@
 					},
 					{
 						"key": "Authorization",
-						"value": "Bearer B77t2XMA0Zk1eUyvfHSEzm19s537Igjdz8cSREYYa951744e",
+						"value": "Bearer xCSxr5Dpe7ih2b5VfInkmmMy1cdGg1DkwHXUQniHac3f619e",
 						"type": "text"
 					}
 				],
@@ -67,15 +77,15 @@
 					"formdata": [
 						{
 							"key": "otp",
-							"value": "421357",
+							"value": "637565",
 							"type": "text"
 						}
 					]
 				},
 				"url": {
-					"raw": "todo.test/api/email/verify?otp",
+					"raw": "todo-api-crud.test/api/email/verify?otp",
 					"host": [
-						"todo",
+						"todo-api-crud",
 						"test"
 					],
 					"path": [
@@ -109,7 +119,18 @@
 						"type": "text"
 					}
 				],
-				"url": "todo.test/api/resend/otp"
+				"url": {
+					"raw": "todo.test/api/resend/otp",
+					"host": [
+						"todo",
+						"test"
+					],
+					"path": [
+						"api",
+						"resend",
+						"otp"
+					]
+				}
 			},
 			"response": []
 		},
@@ -129,17 +150,27 @@
 					"formdata": [
 						{
 							"key": "email",
-							"value": "tayyab@gmail.com",
+							"value": "ahar@gmail.com",
 							"type": "text"
 						},
 						{
 							"key": "password",
-							"value": "123123",
+							"value": "Tayyab@1",
 							"type": "text"
 						}
 					]
 				},
-				"url": "todo.test/api/login"
+				"url": {
+					"raw": "todo-api-crud.test/api/login",
+					"host": [
+						"todo-api-crud",
+						"test"
+					],
+					"path": [
+						"api",
+						"login"
+					]
+				}
 			},
 			"response": []
 		},
@@ -158,7 +189,7 @@
 					},
 					{
 						"key": "Authorization",
-						"value": "Bearer 69GZMTggysb8mJQ0UuZMh648UFIlgIdaebBgmIo490b538f0",
+						"value": "Bearer xCSxr5Dpe7ih2b5VfInkmmMy1cdGg1DkwHXUQniHac3f619e",
 						"type": "text"
 					}
 				],
@@ -166,7 +197,17 @@
 					"mode": "formdata",
 					"formdata": []
 				},
-				"url": "todo.test/api/todo"
+				"url": {
+					"raw": "todo-api-crud.test/api/todo",
+					"host": [
+						"todo-api-crud",
+						"test"
+					],
+					"path": [
+						"api",
+						"todo"
+					]
+				}
 			},
 			"response": []
 		},
@@ -201,7 +242,17 @@
 						}
 					]
 				},
-				"url": "todo.test/api/todo"
+				"url": {
+					"raw": "todo.test/api/todo",
+					"host": [
+						"todo",
+						"test"
+					],
+					"path": [
+						"api",
+						"todo"
+					]
+				}
 			},
 			"response": []
 		},
@@ -239,7 +290,18 @@
 						}
 					]
 				},
-				"url": "todo.test/api/todo/1"
+				"url": {
+					"raw": "todo.test/api/todo/1",
+					"host": [
+						"todo",
+						"test"
+					],
+					"path": [
+						"api",
+						"todo",
+						"1"
+					]
+				}
 			},
 			"response": []
 		},
@@ -263,7 +325,18 @@
 					"mode": "formdata",
 					"formdata": []
 				},
-				"url": "todo.test/api/todo/6"
+				"url": {
+					"raw": "todo.test/api/todo/6",
+					"host": [
+						"todo",
+						"test"
+					],
+					"path": [
+						"api",
+						"todo",
+						"6"
+					]
+				}
 			},
 			"response": []
 		},
@@ -303,6 +376,65 @@
 							"key": "description",
 							"value": "need to share daily market report share"
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user profile",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer HJmO32IRroIXpo9BCkEu0UHPV2k7Ctm9QvIzvEj90a55460f",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "tayyab",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "ahar@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "Tayyab@1",
+							"type": "text"
+						},
+						{
+							"key": "password_confirmation",
+							"value": "Tayyab@1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "todo-api-crud.test/api/user/profile",
+					"host": [
+						"todo-api-crud",
+						"test"
+					],
+					"path": [
+						"api",
+						"user",
+						"profile"
 					]
 				}
 			},
