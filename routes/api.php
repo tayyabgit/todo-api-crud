@@ -22,6 +22,7 @@ Route::controller(AuthController::class)->group(function () {
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('email/verify', [AuthController::class, 'verifyOtp']);
     Route::post('resend/otp', [AuthController::class, 'resendOtp']);
+    Route::get('user/profile', [AuthController::class, 'userProfile']);
 
     Route::apiResource('todo', TodoController::class)->middleware('verified');
 });

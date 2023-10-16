@@ -43,7 +43,7 @@ class TodoController extends Controller
             return response()->json([
                 'code' => 102,
                 'message' => 'Todo task has not been added'
-            ]);
+            ], 400);
         }
     }
 
@@ -62,7 +62,7 @@ class TodoController extends Controller
             return response()->json([
                 'code' => 102,
                 'message' => 'No todo found'
-            ]);
+            ], 404);
         }
     }
 
@@ -74,17 +74,19 @@ class TodoController extends Controller
         $todo->title = $request->title;
         $todo->description = $request->description;
 
-        if($todo->update()){
-            return response()->json([
-                'code' => 101,
-                'message' => 'Todo task has been updated',
-                'data' => new TodoResource($todo)
-            ]);
-        } else {
-            return response()->json([
-                'code' => 102,
-                'message' => 'Todo task has not been updated'
-            ]);
+        if ($todo->user_id == Auth::id()) {
+            if($todo->update()){
+                return response()->json([
+                    'code' => 101,
+                    'message' => 'Todo task has been updated',
+                    'data' => new TodoResource($todo)
+                ]);
+            } else {
+                return response()->json([
+                    'code' => 102,
+                    'message' => 'Todo task has not been updated'
+                ], 400);
+            }
         }
     }
 
@@ -103,13 +105,13 @@ class TodoController extends Controller
                 return response()->json([
                     'code' => 102,
                     'message' => 'Todo has not been deleted'
-                ]);
+                ], 400);
             }
         } else {
             return response()->json([
                 'code' => 103,
                 'message' => 'No todo task found'
-            ]);
+            ], 404);
         }
     }
 }

@@ -24,7 +24,14 @@ class UserRequest extends FormRequest
         return [
             'name' => 'required',
             'email' => 'required|email|unique:users',
-            'password' => 'required|min:6|confirmed'
+            'password' => 'required|min:6|confirmed|regex:/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^a-zA-Z0-9])/'
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'password.regex' => 'Password must contain at least one number and both uppercase and lowercase letters.'
         ];
     }
 }

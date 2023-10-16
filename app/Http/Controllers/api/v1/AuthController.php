@@ -15,26 +15,27 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    function register(UserRequest $req, Otp $otp): JsonResponse
+    function register(UserRequest $req, Otp $otp, User $user): JsonResponse
     {
-        $user = User::create($req->validated());
-        $token = $user->createToken('auth-token');
-        if ($user) {
+        $user->name = $req->name;
+        $user->email = $req->email;
+        $user->password = $req->password;
+        
+        if ($user->save()) {
             $otp->send($user);
             return response()->json([
                 'code' => 101,
-                'message' => 'User has been registered, you will receive opt in your email',
-                'data' => ['user' => new UserResource($user), 'token' => $token->plainTextToken]
+                'message' => 'User has been registered, you will receive opt in your email'
             ]);
         } else {
             return response()->json([
                 'code' => 102,
                 'message' => 'Registration failed'
-            ]);
+            ], 400);
         }
     }
 
-    function verifyOtp(Request $request) : mixed {
+    function verifyOtp(Request $request) : JsonResponse {
         $request->validate([
             'otp' => 'required|digits:6|numeric'
         ]);
@@ -45,28 +46,26 @@ class AuthController extends Controller
             return response()->json([
                 'code' => 104,
                 'message' => 'Otp has already used'
-            ]);
+            ], 410);
         }
 
         if(Carbon::parse($otp_data->expiry_date)->isPast()){
             return response()->json([
                 'code' => 103,
                 'message' => 'Otp has expired'
-            ]);
+            ], 410);
         } else if($otp_data->is_used){
             return response()->json([
                 'code' => 104,
                 'message' => 'Otp has already used'
-            ]);
+            ], 410);
         } else {
             if ($request->otp == $request->user()->otp->code) {
                 $request->user()->update([
                     'email_verified_at' => Carbon::now()->toDateTimeString()
                 ]);
 
-                $request->user()->otp->update([
-                    'is_used' => 1
-                ]);
+                Otp::where('user_id', Auth::id())->where('code', $request->otp)->delete();
 
                 return response()->json([
                     'code' => 101,
@@ -76,7 +75,7 @@ class AuthController extends Controller
                 return response()->json([
                     'code' => 102,
                     'message' => "Otp doesn't match"
-                ]);
+                ], 401);
             }
         }
     }
@@ -112,5 +111,13 @@ class AuthController extends Controller
                 'message' => 'Login failed'
             ], 401);
         }
+    }
+
+    function userProfile() : JsonResponse {
+        return response()->json([
+            'code' => 101,
+            'message' => 'Login user profile',
+            'data' => Auth::user()
+        ]);
     }
 }
