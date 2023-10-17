@@ -6,22 +6,42 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\TodoRequest;
 use App\Http\Resources\TodoResource;
 use App\Models\Todo;
-use Illuminate\Http\Request;
+use App\Repositories\TodoRepository;
+use App\Repositories\TodoRepositoryInterface;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Request;
 
 class TodoController extends Controller
 {
+    private $todoRepository;
+
+    public function __construct(TodoRepositoryInterface $todoRepository) {
+        $this->todoRepository = $todoRepository;
+    }
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $todos = Auth::user()->todos;
-        return response()->json([
-            'code' => 101,
-            'message' => 'Current user todos',
-            'data' => TodoResource::collection($todos)
-        ]);
+        try{
+            $todos = $this->todoRepository->userTodos(Auth::user());
+            return response()->json([
+                'code' => 101,
+                'message' => 'Current user todos',
+                'data' => TodoResource::collection($todos)
+            ]);
+        } catch (QueryException $e) {
+            Log::error('[TodoController index] ' . $e);
+            abort('500');
+        } catch (\PDOException $e) {
+            Log::error('[TodoController index] ' . $e);
+            abort('500');
+        } catch (\Exception $e) {
+            Log::error('[TodoController index] ' . $e);
+            abort('500');
+        }
     }
 
     /**
@@ -29,21 +49,30 @@ class TodoController extends Controller
      */
     public function store(TodoRequest $request, Todo $todo)
     {
-        $todo->user_id = Auth::id();
-        $todo->title = $request->title;
-        $todo->description = $request->description;
+        try{
+            $this->todoRepository->store($todo, $request);
 
-        if($todo->save()){
-            return response()->json([
-                'code' => 101,
-                'message' => 'Todo task has been added',
-                'data' => new TodoResource($todo)
-            ]);
-        } else {
-            return response()->json([
-                'code' => 102,
-                'message' => 'Todo task has not been added'
-            ], 400);
+            if($todo->save()){
+                return response()->json([
+                    'code' => 101,
+                    'message' => 'Todo task has been added',
+                    'data' => new TodoResource($todo)
+                ]);
+            } else {
+                return response()->json([
+                    'code' => 102,
+                    'message' => 'Todo task has not been added'
+                ], 400);
+            }
+        } catch (QueryException $e) {
+            Log::error('[TodoController store] ' . $e);
+            abort('500');
+        } catch (\PDOException $e) {
+            Log::error('[TodoController store] ' . $e);
+            abort('500');
+        } catch (\Exception $e) {
+            Log::error('[TodoController store] ' . $e);
+            abort('500');
         }
     }
 
@@ -52,17 +81,28 @@ class TodoController extends Controller
      */
     public function show(Todo $todo)
     {
-        if($todo){
-            return response()->json([
-                'code' => 101,
-                'message' => 'Todo task',
-                'data' => new TodoResource($todo)
-            ]);
-        } else {
-            return response()->json([
-                'code' => 102,
-                'message' => 'No todo found'
-            ], 404);
+        try{
+            if ($todo->user_id == Auth::id()){
+                return response()->json([
+                    'code' => 101,
+                    'message' => 'Todo task',
+                    'data' => new TodoResource($todo)
+                ]);
+            } else {
+                return response()->json([
+                    'code' => 102,
+                    'message' => 'No todo task found'
+                ], 404);
+            }
+        } catch (QueryException $e) {
+            Log::error('[TodoController show] ' . $e);
+            abort('500');
+        } catch (\PDOException $e) {
+            Log::error('[TodoController show] ' . $e);
+            abort('500');
+        } catch (\Exception $e) {
+            Log::error('[TodoController show] ' . $e);
+            abort('500');
         }
     }
 
@@ -71,22 +111,31 @@ class TodoController extends Controller
      */
     public function update(TodoRequest $request, Todo $todo)
     {
-        $todo->title = $request->title;
-        $todo->description = $request->description;
-
-        if ($todo->user_id == Auth::id()) {
-            if($todo->update()){
-                return response()->json([
-                    'code' => 101,
-                    'message' => 'Todo task has been updated',
-                    'data' => new TodoResource($todo)
-                ]);
+        try{
+            if ($todo->user_id == Auth::id()) {
+                $is_updated = $this->todoRepository->update($todo, $request);
+                if($is_updated){
+                    return response()->json([
+                        'code' => 101,
+                        'message' => 'Todo task has been updated',
+                        'data' => new TodoResource($todo)
+                    ]);
+                }
             } else {
                 return response()->json([
                     'code' => 102,
-                    'message' => 'Todo task has not been updated'
-                ], 400);
+                    'message' => 'No todo task found'
+                ], 404);
             }
+        } catch (QueryException $e) {
+            Log::error('[TodoController index] ' . $e);
+            abort('500');
+        } catch (\PDOException $e) {
+            Log::error('[TodoController index] ' . $e);
+            abort('500');
+        } catch (\Exception $e) {
+            Log::error('[TodoController index] ' . $e);
+            abort('500');
         }
     }
 
@@ -95,8 +144,9 @@ class TodoController extends Controller
      */
     public function destroy(Todo $todo)
     {
-        if($todo->user_id == Auth::id()){
-            if(Todo::destroy($todo->id)){
+        try{
+            if($todo->user_id == Auth::id()){
+                $this->todoRepository->delete($todo);
                 return response()->json([
                     'code' => 101,
                     'message' => 'Todo has been deleted'
@@ -104,14 +154,18 @@ class TodoController extends Controller
             } else {
                 return response()->json([
                     'code' => 102,
-                    'message' => 'Todo has not been deleted'
-                ], 400);
+                    'message' => 'No todo task found'
+                ], 404);
             }
-        } else {
-            return response()->json([
-                'code' => 103,
-                'message' => 'No todo task found'
-            ], 404);
+        } catch (QueryException $e) {
+            Log::error('[TodoController destroy] ' . $e);
+            abort('500');
+        } catch (\PDOException $e) {
+            Log::error('[TodoController destroy] ' . $e);
+            abort('500');
+        } catch (\Exception $e) {
+            Log::error('[TodoController destroy] ' . $e);
+            abort('500');
         }
     }
 }
